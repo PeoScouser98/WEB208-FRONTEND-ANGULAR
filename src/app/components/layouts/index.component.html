@@ -1,0 +1,103 @@
+<app-toast></app-toast>
+<div class="drawer-mobile drawer h-screen" data-theme="light">
+	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+	<div class="drawer-content flex flex-col items-stretch">
+		<!-- Navbar -->
+
+		<label
+			for="drawer-toggle"
+			class="btn-ghost drawer-button btn fixed top-1 right-1 text-xl sm:visible md:invisible lg:invisible"
+		>
+			<i class="bi bi-list"></i>
+		</label>
+
+		<ng-template #loginButton>
+			<a
+				routerLink="/login"
+				class="btn-primary btn fixed top-1 right-1 text-lg"
+				>login</a
+			>
+		</ng-template>
+
+		<!-- Page content here -->
+		<div
+			class="scroll mx-auto h-full w-full max-w-full overflow-x-hidden overflow-y-scroll"
+		>
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+	<!-- Sidebar -->
+	<div
+		class="drawer-side h-screen border-r border-neutral/20 bg-white text-neutral"
+	>
+		<label for="drawer-toggle" class="drawer-overlay"></label>
+
+		<div class="flex w-fit flex-col gap-6 bg-white p-4">
+			<!-- user info -->
+			<label
+				tabindex="0"
+				class="flex h-fit items-center gap-2"
+				*ngIf="authService.isLoggedIn; else loginButton"
+			>
+				<div class="avatar">
+					<div class="h-12 w-12 rounded-full">
+						<img src="{{ authService.currentUser?.photoUrl }}" />
+					</div>
+				</div>
+				<div>
+					<div class="flex items-center gap-4">
+						<span>
+							{{ authService.currentUser?.username }}
+						</span>
+
+						<a routerLink="/account" class="text-neutral">
+							<i class="bi bi-box-arrow-in-down-left"></i>
+						</a>
+					</div>
+					<button class="btn-xs btn" (click)="userService.logout()">
+						Logout
+					</button>
+				</div>
+			</label>
+			<!-- sidebar menu -->
+			<ul class="menu min-w-[320px]">
+				<li>
+					<a routerLink="/"><i class="bi bi-grid"></i> Dashboard</a>
+				</li>
+				<li>
+					<label class="p-0">
+						<div class="collapse-arrow collapse w-full">
+							<input type="checkbox" />
+							<div class="collapse-title flex w-full gap-3">
+								<i class="bi bi-folder"></i> Projects
+							</div>
+							<div class="collapse-content">
+								<ul
+									class="menu min-w-full"
+									*ngFor="
+										let project of projectService.projects
+									"
+								>
+									<li>
+										<a
+											[routerLink]="[
+												'projects',
+												project.id
+											]"
+											>{{ project.projectName }}</a
+										>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</label>
+				</li>
+				<li>
+					<a routerLink="/members"
+						><i class="bi bi-people"></i> Members</a
+					>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,55 @@
+<div class="w-full overflow-x-auto">
+	<table class="table-zebra table w-auto">
+		<!-- head -->
+		<thead class="border-b border-neutral/20">
+			<tr>
+				<th>Name</th>
+				<th>Join In Date</th>
+
+				<th>-</th>
+			</tr>
+		</thead>
+		<tbody *ngFor="let mem of memberService.members">
+			<!-- row 1 -->
+			<tr>
+				<td>
+					<div class="flex items-center space-x-3">
+						<div class="avatar">
+							<div class="mask mask-squircle h-12 w-12">
+								<img src="{{ mem.photoUrl }}" />
+							</div>
+						</div>
+						<div>
+							<div class="font-medium">
+								{{ mem.username }}
+							</div>
+							<div
+								class="text-sm opacity-50"
+								*ngIf="mem.isLeader && mem.isMember"
+							>
+								Leader
+							</div>
+							<div
+								class="text-sm opacity-50"
+								*ngIf="mem.isMember && !mem.isLeader"
+							>
+								Member
+							</div>
+						</div>
+					</div>
+				</td>
+				<td>
+					{{ mem.joinInDate }}
+				</td>
+
+				<th>
+					<a
+						[routerLink]="['members', mem.id]"
+						class="btn-ghost btn-xs btn"
+						>details</a
+					>
+				</th>
+			</tr>
+		</tbody>
+	</table>
+</div>

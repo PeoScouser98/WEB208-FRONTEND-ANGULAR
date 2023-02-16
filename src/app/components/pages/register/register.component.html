@@ -1,0 +1,101 @@
+<div class="hero min-h-screen bg-base-200" data-theme="light">
+	<div class="hero-content flex-col lg:flex-row-reverse">
+		<div class="text-center lg:text-left">
+			<img
+				src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+				class="w-full"
+				alt="Sample image"
+			/>
+		</div>
+		<div class="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
+			<form
+				[formGroup]="registerForm"
+				(ngSubmit)="onSubmit()"
+				class="card-body"
+			>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Email</span>
+					</label>
+					<input
+						type="text"
+						placeholder="email"
+						class="input-bordered input"
+						formControlName="email"
+					/>
+					<small
+						class="text-error"
+						*ngIf="form.email.errors?.['email'] && form.email.dirty"
+						>Email is invalid!</small
+					>
+					<small
+						class="text-error"
+						*ngIf="form.email.errors?.['required'] && form.email.dirty"
+						>Provide an email!</small
+					>
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Password</span>
+					</label>
+					<input
+						type="text"
+						placeholder="password"
+						class="input-bordered input"
+						formControlName="password"
+					/>
+					<small
+						class="text-error"
+						*ngIf="form.password.errors?.['required']&& form.password.dirty"
+						>Provide a password</small
+					>
+					<small
+						class="text-error"
+						*ngIf="form.password.errors?.['minLength']&& form.password.dirty"
+						>Name must have at least
+						{{form.password.errors?.['minLength']}}</small
+					>
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text"
+							>What should we call you ?</span
+						>
+					</label>
+					<input
+						type="text"
+						placeholder="password"
+						class="input-bordered input"
+						formControlName="username"
+					/>
+					<small
+						class="text-error"
+						*ngIf="form.username.errors?.['required']&& form.username.dirty"
+						>Provide a password</small
+					>
+					<small
+						class="text-error"
+						*ngIf="form.username.errors?.['minLength']&& form.username.dirty"
+						>Name must have at least
+						{{form.username.errors?.['minLength']}}</small
+					>
+					<br />
+					<label class="label">
+						<span class="label-text-alt">
+							Already had an account?
+							<a
+								routerLink="/forgot-password"
+								class="link-hover link"
+							>
+								Login</a
+							>
+						</span>
+					</label>
+				</div>
+				<div class="form-control mt-6">
+					<button class="btn-primary btn">Login</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

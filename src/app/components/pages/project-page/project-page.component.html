@@ -1,0 +1,193 @@
+<style></style>
+
+<div class="alert alert-error" *ngIf="isError">
+	<i class="bi bi-x"></i> Ooppppsss!! Something went wrong!
+</div>
+<div
+	class="flex items-center justify-center p-10"
+	*ngIf="isFetching; else project"
+>
+	<div class="loading-spinner loading-spinner-sm"></div>
+</div>
+
+<ng-template #project>
+	<div class="flex min-h-full flex-grow items-stretch">
+		<!--  tasks progress management -->
+		<section class="container mx-auto basis-3/4 p-4">
+			<div class="mb-10 flex items-center justify-between">
+				<h1 class="captalize mb-6 text-2xl font-medium">
+					{{ currentProject.projectName! }}
+				</h1>
+				<button class="btn-ghost btn-square btn-sm btn">
+					<i class="bi bi-pencil"></i>
+				</button>
+			</div>
+			<!-- task list -->
+			<div class="grid grid-cols-3 gap-2">
+				<div class="drop-drag-container">
+					<div
+						class="bg-info p-2 text-center text-lg font-medium uppercase"
+					>
+						To do
+					</div>
+
+					<div
+						cdkDropList
+						data-status="todo"
+						#todoList="cdkDropList"
+						[cdkDropListData]="todos"
+						[cdkDropListConnectedTo]="[inProgressList, doneList]"
+						class="drop-drag-list"
+						(cdkDropListDropped)="drop($event)"
+					>
+						<div
+							class="drop-drag-box"
+							*ngFor="let item of todos"
+							cdkDrag
+						>
+							{{ item.title }}
+						</div>
+					</div>
+				</div>
+
+				<div class="drop-drag-container">
+					<div
+						class="bg-warning p-2 text-center text-lg font-medium uppercase"
+					>
+						In progress
+					</div>
+
+					<div
+						cdkDropList
+						data-status="in_progress"
+						#inProgressList="cdkDropList"
+						[cdkDropListData]="inProgress"
+						[cdkDropListConnectedTo]="[doneList, todoList]"
+						class="drop-drag-list"
+						(cdkDropListDropped)="drop($event)"
+					>
+						<div
+							class="drop-drag-box"
+							*ngFor="let item of inProgress"
+							cdkDrag
+						>
+							{{ item.title }}
+						</div>
+					</div>
+				</div>
+
+				<div class="drop-drag-container">
+					<div
+						class="bg-success p-2 text-center text-lg font-medium uppercase"
+					>
+						Done
+					</div>
+
+					<div
+						cdkDropList
+						data-status="done"
+						#doneList="cdkDropList"
+						[cdkDropListData]="done"
+						[cdkDropListConnectedTo]="[inProgressList, todoList]"
+						class="drop-drag-list"
+						(cdkDropListDropped)="drop($event)"
+					>
+						<div
+							class="drop-drag-box"
+							*ngFor="let item of done"
+							cdkDrag
+						>
+							{{ item.title }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- create task form -->
+		<aside class="min-h-full basis-1/4 border-l border-neutral/20 p-4">
+			<h1 class="mb-4 text-2xl font-medium">Add New Task</h1>
+			<form
+				[formGroup]="addTaskForm"
+				(ngSubmit)="addTodo()"
+				class="mx-auto flex max-w-full flex-col gap-6"
+			>
+				<div class="form-control">
+					<label class="label">Title</label>
+					<input
+						type="text"
+						class="input-bordered input"
+						placeholder="Task name"
+						formControlName="title"
+					/>
+					<small
+						class="font-medium text-error"
+						*ngIf="form.title.errors?.['required'] && form.title.dirty"
+					>
+						Provide a task name!
+					</small>
+				</div>
+
+				<div class="form-control">
+					<label class="label">Description</label>
+					<textarea
+						cols="30"
+						rows="1"
+						class="textarea-bordered textarea"
+						placeholder="Describe about this task"
+						formControlName="description"
+					></textarea>
+					<small
+						class="font-medium text-error"
+						*ngIf="form.description.errors?.['required'] && form.description.dirty "
+					>
+						Provide a description!
+					</small>
+				</div>
+
+				<div class="form-control">
+					<label class="label">Assignee</label>
+					<select
+						formControlName="assignee"
+						class="select-bordered select font-normal"
+					>
+						<option value="">--- Assign to ---</option>
+						<option
+							[value]="member | json"
+							*ngFor="let member of currentProject.members"
+						>
+							{{ member.username }}
+						</option>
+					</select>
+					<small
+						class="font-medium text-error"
+						*ngIf="form.assignee.errors?.['required'] && form.assignee.dirty "
+						>Choose an assignee</small
+					>
+				</div>
+				<div class="form-control">
+					<label class="label">Started At</label>
+					<input
+						type="datetime-local"
+						class="input-bordered input"
+						formControlName="startedAt"
+					/>
+					<small class="font-medium text-error"></small>
+				</div>
+				<div class="form-control">
+					<label class="label">Deadline</label>
+					<input
+						type="datetime-local"
+						class="input-bordered input"
+						formControlName="deadline"
+					/>
+					<small class="font-medium text-error"></small>
+				</div>
+
+				<div class="form-control">
+					<button type="submit" class="btn-primary btn">Save</button>
+				</div>
+			</form>
+		</aside>
+	</div>
+</ng-template>
