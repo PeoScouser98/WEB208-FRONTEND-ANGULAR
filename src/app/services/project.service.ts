@@ -3,26 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import env from '../environment/environment.dev';
 import { Project } from '../interfaces/project.interface';
+
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
 	constructor(private httpClient: HttpClient) {}
 	_projects: Array<Project> = [];
-	getAllProjects() {
+	getAllJoinedProjects() {
 		return this.httpClient.get(env.baseUrl + '/projects');
 	}
-	getProject(id: string | number) {
-		return this.httpClient.get(env.baseUrl + '/projects/' + id, {
-			params: {
-				_embed: 'tasks',
-			},
-		}) as Observable<Project>;
+	getJoinedProject(id: string | number) {
+		return this.httpClient.get(
+			env.baseUrl + '/projects/' + id
+		) as Observable<Project>;
 	}
 	createProject(data: any) {
-		return this.httpClient.post(env.baseUrl + '/projects', data, {
-			headers: {
-				authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-			},
-		});
+		return this.httpClient.post(env.baseUrl + '/projects', data);
 	}
 	get projects() {
 		return this._projects;

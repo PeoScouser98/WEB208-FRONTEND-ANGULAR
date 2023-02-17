@@ -8,8 +8,8 @@ export enum ProjectStatus {
 }
 
 export interface Project {
-	id: number;
+	_id: string;
 	projectName: string;
+	creator: Partial<User>;
 	members: Array<Omit<User, 'password'>>;
-	tasks: Array<Task>;
 }

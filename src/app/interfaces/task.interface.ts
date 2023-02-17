@@ -5,13 +5,12 @@ export enum Status {
 	done = 'done',
 }
 export interface Task {
-	id: number;
+	_id: string;
 	title: string;
 	description: string;
 	startedAt: Date;
-	assignees: Array<Pick<User, 'id' & 'username' & 'photoUrl'>>;
-	estimatedFishingDate: Date;
+	assignee: Partial<User>;
 	status: string;
-	priority: number;
-	projectId: number;
+	deadline: Date;
+	project: number;
 }

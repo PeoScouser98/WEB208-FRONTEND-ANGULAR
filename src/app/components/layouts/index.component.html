@@ -37,24 +37,22 @@
 			<label
 				tabindex="0"
 				class="flex h-fit items-center gap-2"
-				*ngIf="authService.isLoggedIn; else loginButton"
+				*ngIf="authGuardService.isLoggedIn; else loginButton"
 			>
-				<div class="avatar">
-					<div class="h-12 w-12 rounded-full">
-						<img src="{{ authService.currentUser?.photoUrl }}" />
-					</div>
-				</div>
 				<div>
 					<div class="flex items-center gap-4">
 						<span>
-							{{ authService.currentUser?.username }}
+							{{ authGuardService.currentUser?.username }}
 						</span>
 
 						<a routerLink="/account" class="text-neutral">
 							<i class="bi bi-box-arrow-in-down-left"></i>
 						</a>
 					</div>
-					<button class="btn-xs btn" (click)="userService.logout()">
+					<button
+						class="btn-xs btn font-medium"
+						(click)="authService.logout()"
+					>
 						Logout
 					</button>
 				</div>
@@ -68,21 +66,22 @@
 					<label class="p-0">
 						<div class="collapse-arrow collapse w-full">
 							<input type="checkbox" />
-							<div class="collapse-title flex w-full gap-3">
+							<div
+								class="collapse-title flex items-center gap-3 px-4 py-3"
+							>
 								<i class="bi bi-folder"></i> Projects
 							</div>
-							<div class="collapse-content">
-								<ul
-									class="menu min-w-full"
-									*ngFor="
-										let project of projectService.projects
-									"
-								>
-									<li>
+							<div class="collapse-content h-fit min-w-full">
+								<ul class="menu">
+									<li
+										*ngFor="
+											let project of projectService.projects
+										"
+									>
 										<a
 											[routerLink]="[
 												'projects',
-												project.id
+												project._id
 											]"
 											>{{ project.projectName }}</a
 										>

@@ -1,0 +1,67 @@
+<div class="grid grid-cols-3 gap-2">
+	<div class="drop-drag-container">
+		<div
+			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-info"
+		>
+			<i class="bi bi-list"></i> To do
+		</div>
+
+		<div
+			cdkDropList
+			data-status="TODO"
+			#todoList="cdkDropList"
+			[cdkDropListData]="todos"
+			[cdkDropListConnectedTo]="[inProgressList, doneList]"
+			class="drop-drag-list"
+			(cdkDropListDropped)="drop($event)"
+		>
+			<div class="drop-drag-box" *ngFor="let item of todos" cdkDrag>
+				{{ item.title }}
+			</div>
+		</div>
+	</div>
+
+	<div class="drop-drag-container">
+		<div
+			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-warning"
+		>
+			<i class="bi bi-lightning-fill"></i> In progress
+		</div>
+
+		<div
+			cdkDropList
+			data-status="IN_PROGRESS"
+			#inProgressList="cdkDropList"
+			[cdkDropListData]="inProgress"
+			[cdkDropListConnectedTo]="[doneList, todoList]"
+			class="drop-drag-list"
+			(cdkDropListDropped)="drop($event)"
+		>
+			<div class="drop-drag-box" *ngFor="let item of inProgress" cdkDrag>
+				{{ item.title }}
+			</div>
+		</div>
+	</div>
+
+	<div class="drop-drag-container">
+		<div
+			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-success"
+		>
+			<i class="bi bi-check-circle"></i> Done
+		</div>
+
+		<div
+			cdkDropList
+			data-status="COMPLETED"
+			#doneList="cdkDropList"
+			[cdkDropListData]="done"
+			[cdkDropListConnectedTo]="[inProgressList, todoList]"
+			class="drop-drag-list"
+			(cdkDropListDropped)="drop($event)"
+		>
+			<div class="drop-drag-box" *ngFor="let item of done" cdkDrag>
+				{{ item.title }}
+			</div>
+		</div>
+	</div>
+</div>

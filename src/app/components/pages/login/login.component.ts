@@ -1,9 +1,9 @@
-import { AuthorizationService } from 'src/app/services/authorization.service';
+import { AuthGuardService } from 'src/app/services/authGuard.service';
 import { LoginData } from './../../../interfaces/user.interface';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
 	selector: 'app-login',
@@ -11,9 +11,9 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginPage {
 	constructor(
-		private authService: UserService,
+		private authService: AuthService,
 		private router: Router,
-		private authorizationService: AuthorizationService
+		private authGuardService: AuthGuardService
 	) {}
 	loginForm = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
@@ -30,23 +30,17 @@ export class LoginPage {
 			});
 			return;
 		}
-		console.log(this.loginForm.value);
-		this.authService
-			.login(this.loginForm.value)
-			.subscribe((data: LoginData) => {
-				console.log(data);
+
+		this.authService.login(this.loginForm.value).subscribe(
+			(data) => {
+				localStorage.setItem('auth', data.auth);
 				localStorage.setItem('accessToken', data.accessToken);
-				localStorage.setItem('auth', JSON.stringify(data.user));
-				this.authorizationService.handleStorageEvent(
-					new StorageEvent('storage', {
-						key: 'auth',
-						oldValue: null,
-						newValue: JSON.stringify(data.user),
-						url: window.location.href,
-					})
-				);
 				this.router.navigate(['']);
-			});
+			},
+			({ error }) => {
+				console.log(error);
+			}
+		);
 	}
 	get form() {
 		return this.loginForm.controls;

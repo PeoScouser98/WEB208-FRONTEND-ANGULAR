@@ -1,14 +1,9 @@
-import { Task } from './../../../interfaces/task.interface';
-import {
-	CdkDragDrop,
-	moveItemInArray,
-	transferArrayItem,
-} from '@angular/cdk/drag-drop';
-
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Project } from 'src/app/interfaces/project.interface';
+import { Task } from 'src/app/interfaces/task.interface';
+import { User } from 'src/app/interfaces/user.interface';
 import { ProjectService } from 'src/app/services/project.service';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -17,6 +12,7 @@ import { TaskService } from 'src/app/services/task.service';
 	templateUrl: './project-page.component.html',
 })
 export class ProjectPage {
+	newTask: Task | any;
 	currentProject: Project | any = null;
 	isFetching: boolean = false;
 	isError: boolean = false;
@@ -24,17 +20,6 @@ export class ProjectPage {
 	todos: Array<Task> = [];
 	inProgress: Array<Task> = [];
 	done: Array<Task> = [];
-
-	addTaskForm = new FormGroup({
-		title: new FormControl('', [
-			Validators.required,
-			Validators.minLength(3),
-		]),
-		description: new FormControl('', [Validators.required]),
-		assignee: new FormControl('', [Validators.required]),
-		startedAt: new FormControl('', [Validators.required]),
-		deadline: new FormControl('', [Validators.required]),
-	});
 
 	constructor(
 		private route: ActivatedRoute,
@@ -44,25 +29,40 @@ export class ProjectPage {
 
 	ngOnInit() {
 		this.route.params.subscribe(({ id }) => {
-			this.fetchCurrentProject(id);
+			this.getCurrentProject(id);
+			this.getTasksOfCurrentProject(id);
 		});
 	}
 
-	fetchCurrentProject(id: string) {
+	getTasksOfCurrentProject(projectId: string) {
 		this.isFetching = true;
-		this.projectService.getProject(id).subscribe(
+		this.taskService.getTasksByProject(projectId).subscribe((data) => {
+			this.todos = (data as Array<Task>).filter(
+				(task: Task) => task.status === 'TODO'
+			);
+			this.done = (data as Array<Task>).filter(
+				(task: Task) => task.status === 'COMPLETED'
+			);
+			this.inProgress = (data as Array<Task>).filter(
+				(task: Task) => task.status === 'IN_PROGRESS'
+			);
+		});
+	}
+
+	// Catch submit event from add task form to get new task value
+	onAddNewTask(newTask: Task) {
+		console.log('new task :>>>', newTask);
+		this.todos.push(newTask); // push new task into todo list
+	}
+
+	// Get current project
+	getCurrentProject(id: string) {
+		this.isFetching = true;
+		this.projectService.getJoinedProject(id).subscribe(
 			(data) => {
 				console.log(data);
 				this.currentProject = data as Project;
-				this.todos = data?.tasks.filter(
-					(task: Task) => task.status === 'todo'
-				);
-				this.done = data?.tasks.filter(
-					(task: Task) => task.status === 'done'
-				);
-				this.inProgress = data?.tasks.filter(
-					(task: Task) => task.status === 'in_progress'
-				);
+				console.log(data);
 				this.isFetching = false;
 			},
 			(error) => {
@@ -71,50 +71,5 @@ export class ProjectPage {
 				this.isError = true;
 			}
 		);
-	}
-
-	addTodo() {
-		console.log(this.addTaskForm.value);
-		if (this.addTaskForm.invalid) {
-			Object.values(this.form).forEach((control) => {
-				if (control.invalid) {
-					control.markAsDirty();
-					control.updateValueAndValidity();
-				}
-			});
-			return;
-		}
-	}
-
-	// update task's status using drag/drop
-	drop(event: CdkDragDrop<Task[]>) {
-		if (event.previousContainer === event.container) {
-			console.log(event);
-			moveItemInArray(
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex
-			);
-		} else {
-			transferArrayItem(
-				event.previousContainer.data,
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex
-			);
-			const task = event.container.data[event.currentIndex] as Task;
-			const newStatus =
-				event.container.element.nativeElement.dataset['status'];
-			// update task data
-			this.taskService
-				.updateTask(task.id, { status: newStatus })
-				.subscribe((data) => {
-					console.log(data);
-				});
-		}
-	}
-
-	get form() {
-		return this.addTaskForm.controls;
 	}
 }

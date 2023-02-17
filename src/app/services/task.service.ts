@@ -6,15 +6,25 @@ import { Task } from '../interfaces/task.interface';
 @Injectable({ providedIn: 'root' })
 export class TaskService {
 	constructor(private httpClient: HttpClient) {}
-
-	createTask(taskData: Partial<Task>) {
-		return this.httpClient.post(env.baseUrl + '/task', taskData);
+	getTasksByProject(projectId: string) {
+		return this.httpClient.get(env.baseUrl + '/tasks/' + projectId);
 	}
-	updateTask(taskId: string | number, updatedTaskData: Partial<Task>) {
-		console.log(taskId);
+	createTask(taskData: Partial<Task>) {
+		return this.httpClient.post(env.baseUrl + '/tasks', taskData);
+	}
+	updateTask(
+		projectId: string,
+		taskId: string | number,
+		updatedTaskData: Partial<Task>
+	) {
 		return this.httpClient.patch(
 			env.baseUrl + '/tasks/' + taskId,
-			updatedTaskData
+			updatedTaskData,
+			{
+				params: {
+					projectId: projectId,
+				},
+			}
 		);
 	}
 	deleteTask(taskId: string | number) {

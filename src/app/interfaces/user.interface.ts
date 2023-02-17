@@ -1,5 +1,5 @@
 export interface User {
-	id: number | string;
+	_id: string;
 	email: string;
 	password: string;
 	username: string;
@@ -14,7 +14,7 @@ export interface Member extends User {
 
 export type LoginData = {
 	accessToken: string;
-	user: Omit<User, 'password'>;
+	auth: string;
 };
 
 export type RegisterData = Omit<User, 'id'>;

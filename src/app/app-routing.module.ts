@@ -1,5 +1,5 @@
 import { ProjectPage } from './components/pages/project-page/project-page.component';
-import { AuthorizationService } from 'src/app/services/authorization.service';
+import { AuthGuardService } from 'src/app/services/authGuard.service';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Dashboard } from './components/layouts/index.component';
@@ -11,7 +11,7 @@ const routes: Routes = [
 	{
 		path: '',
 		component: Dashboard,
-		canActivate: [AuthorizationService],
+		canActivate: [AuthGuardService],
 		children: [
 			{
 				path: '',

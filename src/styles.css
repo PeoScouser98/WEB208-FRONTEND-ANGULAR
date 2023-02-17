@@ -92,4 +92,9 @@
 	.label {
 		@apply font-medium;
 	}
+
+	.collapse-title,
+	:where(.collapse > input[type="checkbox"]) {
+		@apply min-h-fit w-full p-1 transition-[background-color_0.2s_ease-in-out];
+	}
 }

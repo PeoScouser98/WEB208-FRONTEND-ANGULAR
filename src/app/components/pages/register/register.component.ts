@@ -1,6 +1,6 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user.interface';
 import { ToastComponent } from '../../shared/toast/toast.component';
 import { ToastService } from 'src/app/services/toast.service';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage {
 	constructor(
-		private authenticateService: UserService,
+		private authenticateService: AuthService,
 		private toast: ToastService,
 		private router: Router
 	) {

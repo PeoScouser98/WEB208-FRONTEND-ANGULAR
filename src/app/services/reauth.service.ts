@@ -1,4 +1,4 @@
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { Injectable } from '@angular/core';
 import {
 	HttpInterceptor,
@@ -12,7 +12,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {
-	constructor(private authService: UserService) {}
+	constructor(private authService: AuthService) {}
 	credential: string | null = JSON.parse(localStorage.getItem('auth')!);
 	intercept(
 		req: HttpRequest<any>,
