@@ -97,7 +97,7 @@ export class ProjectPage {
 				this.currentProject = data as Project;
 				this.isProjectCreator =
 					data?.creator?._id ===
-					this.authGuardService.currentUser._id;
+					this.authGuardService?.currentUser?._id;
 				this.isFetching = false;
 			},
 			(error) => {
