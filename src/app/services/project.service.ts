@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import env from '../environment/environment.dev';
 import { Project } from '../interfaces/project.interface';
+import { User } from '../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -11,14 +12,39 @@ export class ProjectService {
 	getAllJoinedProjects() {
 		return this.httpClient.get(env.baseUrl + '/projects');
 	}
+
 	getJoinedProject(id: string | number) {
 		return this.httpClient.get(
 			env.baseUrl + '/projects/' + id
 		) as Observable<Project>;
 	}
-	createProject(data: any) {
-		return this.httpClient.post(env.baseUrl + '/projects', data);
+
+	createProject(data: Partial<Project>) {
+		return this.httpClient.post(
+			env.baseUrl + '/projects',
+			data
+		) as Observable<Project>;
 	}
+
+	addMember(projectId: string, userId: string) {
+		return this.httpClient.patch(
+			env.baseUrl + '/projects/' + projectId + '/add-member',
+			{ member: userId }
+		);
+	}
+
+	updateProject(projectId: string, data: Partial<Project>) {
+		return this.httpClient.patch(
+			env.baseUrl + '/projects/' + projectId,
+			data
+		);
+	}
+	deleteProject(projectId: string): Observable<Project> {
+		return this.httpClient.delete(
+			env.baseUrl + '/projects/' + projectId
+		) as Observable<Project>;
+	}
+
 	get projects() {
 		return this._projects;
 	}

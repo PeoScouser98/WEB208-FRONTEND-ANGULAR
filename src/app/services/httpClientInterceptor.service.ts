@@ -25,31 +25,36 @@ export class TokenInterceptor implements HttpInterceptor {
 			catchError((error: any) => {
 				if (
 					error instanceof HttpErrorResponse &&
-					(error.status === 401 || error.status === 403)
+					error.status === 401
 				) {
 					console.log('[ERROR] Access token has expired!');
 					// Continue to send previos request
-					return this.authService.refreshToken(this.auth).pipe(
-						switchMap((newToken: any) => {
-							console.log('[INFO] New access token:>>', newToken);
-							localStorage.setItem('accessToken', newToken);
-							request = request.clone({
-								setHeaders: {
-									authorization: `Bearer ${newToken}`,
-								},
-							});
-							return next.handle(request);
-						}),
-						catchError((refreshError: any) => {
-							if (
-								refreshError instanceof HttpErrorResponse &&
-								(error.status === 401 || error.status === 403)
-							) {
-								this.authService.logout();
-							}
-							return throwError(refreshError);
-						})
-					);
+					return this.authService
+						.refreshToken(localStorage.getItem('auth')!)
+						.pipe(
+							switchMap((newToken: any) => {
+								console.log(
+									'[INFO] New access token:>>',
+									newToken
+								);
+								localStorage.setItem('accessToken', newToken);
+								request = request.clone({
+									setHeaders: {
+										authorization: `Bearer ${newToken}`,
+									},
+								});
+								return next.handle(request);
+							}),
+							catchError((refreshError: any) => {
+								if (
+									refreshError instanceof HttpErrorResponse &&
+									error.status === 401
+								) {
+									this.authService.logout();
+								}
+								return throwError(refreshError);
+							})
+						);
 				}
 				return throwError(error);
 			})

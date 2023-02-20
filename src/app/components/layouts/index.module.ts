@@ -1,15 +1,16 @@
-import { MemberListComponent } from './../shared/member-list/member-list.component';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { EditProjectForm } from './../shared/edit-project-form/edit-project-form.component';
+import { CreateProjectForm } from './../shared/create-project-form/create-project-form.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Homepage } from '../pages/homepage/homepage.component';
-import { MemberPage } from './../pages/member-list/member-list.component';
-import { ProjectPage } from '../pages/project-page/project-page.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TokenInterceptor } from 'src/app/services/httpClientInterceptor.service';
+import { Homepage } from '../pages/homepage/homepage.component';
+import { ProjectPage } from '../pages/project-page/project-page.component';
 import { AddTaskForm } from '../shared/add-task-form/add-task-form.component';
+import { EditTaskForm } from '../shared/edit-task-form/edit-task-form.component';
 import { TasksList } from '../shared/task-list/task-list.component';
 
 @NgModule({
@@ -24,19 +25,21 @@ import { TasksList } from '../shared/task-list/task-list.component';
 	],
 	exports: [
 		Homepage,
-		MemberPage,
 		ProjectPage,
-		MemberListComponent,
 		AddTaskForm,
 		TasksList,
+		EditTaskForm,
+		CreateProjectForm,
+		EditProjectForm,
 	],
 	declarations: [
 		Homepage,
-		MemberPage,
 		ProjectPage,
-		MemberListComponent,
 		AddTaskForm,
 		TasksList,
+		EditTaskForm,
+		CreateProjectForm,
+		EditProjectForm,
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

@@ -5,13 +5,21 @@ import { Task } from '../interfaces/task.interface';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
+	taskToEdit: Task | any;
+
 	constructor(private httpClient: HttpClient) {}
+
 	getTasksByProject(projectId: string) {
 		return this.httpClient.get(env.baseUrl + '/tasks/' + projectId);
 	}
-	createTask(taskData: Partial<Task>) {
-		return this.httpClient.post(env.baseUrl + '/tasks', taskData);
+
+	createTask(taskData: Partial<Task>, projectId: string) {
+		return this.httpClient.post(
+			env.baseUrl + '/tasks/' + projectId,
+			taskData
+		);
 	}
+
 	updateTask(
 		projectId: string,
 		taskId: string | number,
@@ -27,7 +35,10 @@ export class TaskService {
 			}
 		);
 	}
-	deleteTask(taskId: string | number) {
-		return this.httpClient.delete(env.baseUrl + '/tasks/' + taskId);
+
+	deleteTask(taskId: string, projectId: string) {
+		return this.httpClient.delete(env.baseUrl + '/tasks/' + taskId, {
+			params: { projectId: projectId },
+		});
 	}
 }

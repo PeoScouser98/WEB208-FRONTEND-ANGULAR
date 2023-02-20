@@ -44,10 +44,10 @@
 		>
 			<option value="">--- Assign to ---</option>
 			<option
-				[value]="value.member._id"
-				*ngFor="let value of currentProject.members"
+				[value]="member.info._id"
+				*ngFor="let member of currentProject.members"
 			>
-				{{ value.member.username }}
+				{{ member.info.username }}
 			</option>
 		</select>
 		<small
@@ -59,7 +59,7 @@
 	<div class="form-control">
 		<label class="label">Started At</label>
 		<input
-			type="datetime-local"
+			type="date"
 			class="input-bordered input"
 			formControlName="startedAt"
 		/>
@@ -72,7 +72,7 @@
 	<div class="form-control">
 		<label class="label">Deadline</label>
 		<input
-			type="datetime-local"
+			type="date"
 			class="input-bordered input"
 			formControlName="deadline"
 		/>
@@ -84,6 +84,6 @@
 	</div>
 
 	<div class="form-control">
-		<button type="submit" class="btn-primary btn">Save</button>
+		<button type="submit" class="btn font-medium">Save</button>
 	</div>
 </form>

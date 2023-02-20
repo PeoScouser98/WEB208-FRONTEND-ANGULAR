@@ -35,6 +35,13 @@ export class AuthService {
 			env.baseUrl + '/refresh-token/' + credential
 		);
 	}
+	findUser(searchTermValue: string) {
+		return this.httpClient.get(env.baseUrl + '/find-user', {
+			params: {
+				searchTerm: searchTermValue,
+			},
+		});
+	}
 	logout() {
 		localStorage.removeItem('auth');
 		localStorage.removeItem('accessToken');

@@ -1,9 +1,8 @@
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer base {
-}
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
+
 @layer components {
 	.btn {
 		@apply capitalize;
@@ -16,11 +15,11 @@
 		@apply hidden;
 	}
 	.scroll {
-		@apply: w-1 [&:-webkit-scrollbar]:;
+		@apply: w-[4px];
 	}
 
 	.scroll::-webkit-scrollbar {
-		@apply mr-1 w-2 opacity-0;
+		@apply mr-1 h-1 w-1 opacity-0;
 	}
 	.scroll::-webkit-scrollbar-track {
 		@apply w-4;
@@ -31,18 +30,21 @@
 	/*#endregion */
 
 	/* #region menu */
+	.menu > li > * {
+		@apply rounded-lg;
+	}
 	.menu :where(li:not(.menu-title):not(:empty)) > :where(:not(ul).active),
 	.menu :where(li:not(.menu-title):not(:empty)) > :where(*:not(ul):active) {
-		@apply bg-neutral/50;
+		@apply bg-neutral-content/20;
 	}
 	/* #endregion */
 
 	/*#region loading */
 	.loading-spinner {
-		@apply pointer-events-none animate-spin rounded-full border-transparent border-t-primary border-b-primary;
+		@apply pointer-events-none animate-spin rounded-full border-transparent border-t-success border-r-success;
 	}
 	.loading-spinner-xs {
-		@apply h-4 w-4  border-[3px];
+		@apply h-4 w-4  border-[2px];
 	}
 	.loading-spinner-sm {
 		@apply h-6 w-6  border-[3px];
@@ -61,11 +63,11 @@
 	}
 
 	.drop-drag-list {
-		@apply block min-h-[66px] overflow-hidden border;
+		@apply block min-h-[61px] overflow-hidden border bg-white shadow-2xl;
 	}
 
 	.drop-drag-box {
-		@apply flex cursor-grabbing items-center justify-between border-b bg-white py-5 px-[10px] text-base text-neutral;
+		@apply m-0 cursor-grabbing bg-white py-4 px-3 capitalize text-neutral shadow-2xl [inline-border:solid_1px_lightgray];
 	}
 
 	.drop-drag-box.cdk-drag-preview {
@@ -92,7 +94,9 @@
 	.label {
 		@apply font-medium;
 	}
-
+	.label-require {
+		@apply before:mr-2 before:text-error before:[content:'*'];
+	}
 	.collapse-title,
 	:where(.collapse > input[type="checkbox"]) {
 		@apply min-h-fit w-full p-1 transition-[background-color_0.2s_ease-in-out];

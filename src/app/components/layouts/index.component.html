@@ -1,68 +1,36 @@
 <app-toast></app-toast>
-<div class="drawer-mobile drawer h-screen" data-theme="light">
+<div class="drawer-mobile drawer h-screen" [attr.data-theme]="theme">
+	<!-- Drawer toggler -->
 	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+	<!-- Page content -->
 	<div class="drawer-content flex flex-col items-stretch">
-		<!-- Navbar -->
-
 		<label
 			for="drawer-toggle"
-			class="btn-ghost drawer-button btn fixed top-1 right-1 text-xl sm:visible md:invisible lg:invisible"
+			class="btn-ghost btn drawer-button invisible fixed top-1 right-1 text-xl sm:visible"
 		>
 			<i class="bi bi-list"></i>
 		</label>
 
-		<ng-template #loginButton>
-			<a
-				routerLink="/login"
-				class="btn-primary btn fixed top-1 right-1 text-lg"
-				>login</a
-			>
-		</ng-template>
-
 		<!-- Page content here -->
 		<div
-			class="scroll mx-auto h-full w-full max-w-full overflow-x-hidden overflow-y-scroll"
+			class="scroll mx-auto h-full w-full max-w-full overflow-y-auto overflow-x-hidden"
 		>
 			<router-outlet></router-outlet>
 		</div>
 	</div>
 	<!-- Sidebar -->
-	<div
-		class="drawer-side h-screen border-r border-neutral/20 bg-white text-neutral"
-	>
+	<div class="drawer-side h-screen text-neutral-content">
 		<label for="drawer-toggle" class="drawer-overlay"></label>
 
-		<div class="flex w-fit flex-col gap-6 bg-white p-4">
-			<!-- user info -->
-			<label
-				tabindex="0"
-				class="flex h-fit items-center gap-2"
-				*ngIf="authGuardService.isLoggedIn; else loginButton"
-			>
-				<div>
-					<div class="flex items-center gap-4">
-						<span>
-							{{ authGuardService.currentUser?.username }}
-						</span>
-
-						<a routerLink="/account" class="text-neutral">
-							<i class="bi bi-box-arrow-in-down-left"></i>
-						</a>
-					</div>
-					<button
-						class="btn-xs btn font-medium"
-						(click)="authService.logout()"
-					>
-						Logout
-					</button>
-				</div>
-			</label>
+		<div class="flex w-fit flex-col justify-between gap-6 bg-neutral-focus">
 			<!-- sidebar menu -->
-			<ul class="menu min-w-[320px]">
-				<li>
+			<ul
+				class="menu h-full min-w-[320px] py-6 px-4 text-base [&>li]:rounded-lg"
+			>
+				<li class="hover:bg-neutral-content/20">
 					<a routerLink="/"><i class="bi bi-grid"></i> Dashboard</a>
 				</li>
-				<li>
+				<li class="hover:bg-neutral-content/20">
 					<label class="p-0">
 						<div class="collapse-arrow collapse w-full">
 							<input type="checkbox" />
@@ -73,6 +41,17 @@
 							</div>
 							<div class="collapse-content h-fit min-w-full">
 								<ul class="menu">
+									<li>
+										<label
+											for="create-project-form"
+											class="text-info"
+										>
+											<i
+												class="bi bi-plus-square-dotted"
+											></i>
+											Create New Project
+										</label>
+									</li>
 									<li
 										*ngFor="
 											let project of projectService.projects
@@ -83,7 +62,9 @@
 												'projects',
 												project._id
 											]"
-											>{{ project.projectName }}</a
+										>
+											<i class="bi bi-folder2-open"></i>
+											{{ project.projectName }}</a
 										>
 									</li>
 								</ul>
@@ -91,12 +72,68 @@
 						</div>
 					</label>
 				</li>
-				<li>
-					<a routerLink="/members"
-						><i class="bi bi-people"></i> Members</a
-					>
+
+				<li class="hover:bg-neutral-content/20">
+					<label class="p-0">
+						<div class="collapse-arrow collapse w-full">
+							<input type="checkbox" />
+							<div
+								class="collapse-title flex items-center gap-3 px-4 py-3"
+							>
+								<i class="bi bi-gear"></i> Themes
+							</div>
+							<div class="collapse-content h-fit min-w-full">
+								<ul class="menu">
+									<li (click)="setTheme('light')">
+										<label>
+											<i class="bi bi-sun"></i>Light Theme
+										</label>
+									</li>
+									<li (click)="setTheme('dark')">
+										<label
+											><i class="bi bi-moon"></i>Dark
+											Theme</label
+										>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</label>
 				</li>
 			</ul>
+
+			<!-- user info -->
+			<label
+				tabindex="0"
+				class="flex h-fit w-full items-center justify-between gap-2 bg-neutral p-4"
+			>
+				<div class="flex items-center gap-4">
+					<div class="avatar">
+						<div class="w-10 rounded-full">
+							<img
+								[src]="authGuardService.currentUser?.photoUrl"
+							/>
+						</div>
+					</div>
+					<span>
+						{{ authGuardService.currentUser?.username }}
+					</span>
+
+					<a routerLink="/account">
+						<i class="bi bi-box-arrow-in-down-left"></i>
+					</a>
+				</div>
+				<div class="tooltip tooltip-left" data-tip="Logout">
+					<button
+						class="btn-ghost btn btn-xs w-fit text-xl font-medium hover:bg-transparent"
+						(click)="authService.logout()"
+					>
+						<i class="bi bi-door-open"></i>
+					</button>
+				</div>
+			</label>
 		</div>
 	</div>
+	<!-- Create project form -->
+	<create-project-form></create-project-form>
 </div>

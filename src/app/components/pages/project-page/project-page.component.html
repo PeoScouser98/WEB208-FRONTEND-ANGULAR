@@ -1,40 +1,201 @@
-<div class="alert alert-error rounded-none" *ngIf="isError">
+<div class="alert alert-error rounded-none" *ngIf="isError; else loading">
 	Ooppppsss!! Something went wrong!
 </div>
-<div
-	class="flex items-center justify-center p-10"
-	*ngIf="isFetching; else project"
->
-	<div class="loading-spinner loading-spinner-sm"></div>
-</div>
+
+<ng-template #loading>
+	<div
+		class="flex items-center justify-center p-10"
+		*ngIf="isFetching; else project"
+	>
+		<div class="loading-spinner loading-spinner-sm"></div>
+	</div>
+</ng-template>
 
 <ng-template #project>
 	<div class="flex min-h-full flex-grow items-stretch">
 		<!--  tasks progress management -->
-		<section class="container mx-auto basis-3/4 p-4">
-			<div class="mb-10 flex items-center justify-between">
-				<h1 class="captalize mb-6 text-2xl font-medium">
-					{{ currentProject.projectName! }}
-				</h1>
-				<button class="btn-ghost btn-square btn-sm btn">
-					<i class="bi bi-pencil"></i>
-				</button>
+		<section class="container mx-auto basis-3/4">
+			<div class="flex justify-between">
+				<div
+					class="captalize mb-6 flex w-full items-start justify-between gap-2 py-6 px-4"
+				>
+					<!-- project name -->
+					<div class="flex flex-col gap-2">
+						<div class="text-2xl font-medium">
+							{{ currentProject?.projectName! }}
+						</div>
+						<!-- project options -->
+						<div class="dropdown-right dropdown">
+							<label
+								tabindex="0"
+								class="btn-ghost btn-sm btn-square btn"
+							>
+								<i class="bi bi-three-dots"></i>
+							</label>
+							<ul
+								tabindex="0"
+								class="dropdown-content menu w-52 rounded-lg border bg-base-100 p-2 shadow-2xl"
+							>
+								<li>
+									<label
+										for="edit-project-form"
+										*ngIf="
+											isProjectCreator;
+											else fakeEditProjectButton
+										"
+										><i class="bi bi-pencil"></i>
+										Edit</label
+									>
+									<ng-template #fakeEditProjectButton>
+										<a
+											(click)="
+												toastService.error(
+													'Only project creator can edit this project!'
+												)
+											"
+											><i class="bi bi-pencil"></i>
+											Edit</a
+										>
+									</ng-template>
+								</li>
+								<li class="text-error">
+									<a
+										(click)="deleteProject()"
+										*ngIf="
+											isProjectCreator;
+											else fakeDeleteButton
+										"
+										><i class="bi bi-trash"></i> Delete</a
+									>
+
+									<ng-template #fakeDeleteButton>
+										<a
+											(click)="
+												toastService.error(
+													'Only project creator can delete this project!'
+												)
+											"
+											><i class="bi bi-trash"></i> Delete
+										</a>
+									</ng-template>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- search box -->
+					<div class="dropdown w-fit">
+						<label
+							for="search-member"
+							class="absolute top-1/2 left-2 -translate-y-1/2 text-xl"
+						>
+							<div
+								class="loading-spinner loading-spinner-xs"
+								*ngIf="isSearching; else searchIcon"
+							></div>
+							<ng-template #searchIcon>
+								<i class="bi bi-search"></i>
+							</ng-template>
+						</label>
+						<input
+							type="search"
+							id="search-member"
+							[(ngModel)]="searchTerm"
+							(input)="findUserByNameOrEmail()"
+							class="input-bordered input pl-10"
+							placeholder="Search user ..."
+						/>
+
+						<div
+							class="dropdown-content min-w-full rounded-lg pt-6 shadow-2xl"
+							*ngIf="searchResult.length !== 0"
+						>
+							<ul
+								class="flex flex-col gap-2 rounded-lg bg-base-100 p-2"
+							>
+								<li
+									*ngFor="let user of searchResult"
+									class="rounded-lg px-4 py-3 hover:bg-neutral/10 hover:duration-500"
+								>
+									<label
+										class="flex items-center justify-between"
+									>
+										<div class="flex items-center gap-2">
+											<div class="avatar">
+												<div class="w-8 rounded-full">
+													<img
+														[src]="user.photoUrl"
+														alt=""
+													/>
+												</div>
+											</div>
+
+											{{ user.username }}
+										</div>
+										<button
+											class="btn-ghost btn-sm btn-square btn text-lg hover:bg-transparent hover:text-info"
+											(click)="addMemberToProject(user)"
+										>
+											<i class="bi bi-person-plus"></i>
+										</button>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- members list -->
+					<div class="flex items-center gap-3">
+						<span
+							>{{ currentProject?.members?.length }} members</span
+						>
+						<div class="avatar-group -space-x-4">
+							<div
+								class="avatar"
+								*ngFor="let member of currentProject?.members"
+							>
+								<div class="w-8 rounded-full">
+									<img
+										[src]="member?.info?.photoUrl"
+										alt=""
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<tasks-list
-				[currentProject]="currentProject"
-				[todos]="todos"
-				[inProgress]="inProgress"
-				[done]="done"
-			></tasks-list>
+
+			<!-- Tasks list -->
+			<div class="grid grid-cols-3 gap-2 px-4" cdkDropListGroup>
+				<tasks-list
+					[currentProject]="currentProject"
+					[listData]="list.data"
+					[listTitle]="list.listTitle"
+					[status]="list.status"
+					*ngFor="let list of taskList"
+				></tasks-list>
+				<edit-task-form
+					[currentProject]="currentProject"
+					[taskToEdit]="taskService.taskToEdit"
+					(editTaskEvent)="onEditTask($event)"
+				></edit-task-form>
+			</div>
 		</section>
 
 		<!-- create task form -->
-		<aside class="min-h-full basis-1/4 border-l border-neutral/20 p-4">
+		<aside class="min-h-full basis-1/4 bg-base-300 p-4">
 			<h1 class="mb-4 text-2xl font-medium">Add New Task</h1>
 			<add-task-form
 				[currentProject]="currentProject"
 				(addNewTask)="onAddNewTask($event)"
 			></add-task-form>
 		</aside>
+
+		<!-- Edit project form -->
+		<edit-project-form
+			[currentProject]="currentProject"
+			(editProjectEvent)="onUpdateProject($event)"
+		></edit-project-form>
 	</div>
 </ng-template>

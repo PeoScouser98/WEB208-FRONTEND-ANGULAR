@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
 	selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginPage {
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		private authGuardService: AuthGuardService
+		private toastService: ToastService
 	) {}
 	loginForm = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
@@ -35,9 +36,11 @@ export class LoginPage {
 			(data) => {
 				localStorage.setItem('auth', data.auth);
 				localStorage.setItem('accessToken', data.accessToken);
+				this.toastService.success('Loggedin successfully!');
 				this.router.navigate(['']);
 			},
 			({ error }) => {
+				this.toastService.success(error);
 				console.log(error);
 			}
 		);

@@ -11,6 +11,8 @@ import { ToastService } from 'src/app/services/toast.service';
 	templateUrl: 'index.component.html',
 })
 export class Dashboard implements OnInit {
+	theme: string = localStorage.getItem('theme')!;
+
 	constructor(
 		public toast: ToastService,
 		public authGuardService: AuthGuardService,
@@ -18,18 +20,34 @@ export class Dashboard implements OnInit {
 		public router: Router,
 		public projectService: ProjectService,
 		public authService: AuthService
-	) {}
+	) {
+		if (!localStorage.getItem('theme')) {
+			localStorage.setItem('theme', 'light');
+		}
+	}
+
 	ngOnInit(): void {
 		this.authService.getUser().subscribe((data) => {
 			console.log(data);
 			this.authGuardService.currentUser = data;
 			this.authGuardService.isLoggedIn = true;
 		});
-		this.projectService
-			.getAllJoinedProjects()
-			.subscribe(
-				(data) =>
-					(this.projectService.projects = data as Array<Project>)
-			);
+		this.projectService.getAllJoinedProjects().subscribe((data) => {
+			console.log(data);
+			this.projectService.projects = data as Array<Project>;
+		});
+	}
+
+	onCreateNewProject(newProject: Project) {
+		this.projectService.projects.push(newProject);
+	}
+	onDeleteProject(deletedProject: Project) {
+		this.projectService.projects.filter(
+			(project) => project._id !== deletedProject._id
+		);
+	}
+	setTheme(theme: string) {
+		this.theme = theme;
+		localStorage.setItem('theme', theme);
 	}
 }

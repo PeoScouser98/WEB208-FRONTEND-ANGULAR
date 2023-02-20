@@ -1,0 +1,21 @@
+<div
+	*ngIf="toast.show"
+	class="toast-end toast-bottom toast z-[999] animate-fadeInOut"
+>
+	<div [ngClass]="'alert min-w-[240px] rounded-lg font-medium ' + toast.type">
+		<div>
+			<ng-container [ngSwitch]="toast.type" ]>
+				<span *ngSwitchCase="'alert-success'">
+					<i class="bi bi-check-circle"></i>
+				</span>
+				<span *ngSwitchCase="'alert-info'">
+					<i class="bi bi-info-circle"></i>
+				</span>
+				<span *ngSwitchCase="'alert-error'">
+					<i class="bi bi-x"></i>
+				</span>
+			</ng-container>
+			<span> {{ toast.message }}</span>
+		</div>
+	</div>
+</div>

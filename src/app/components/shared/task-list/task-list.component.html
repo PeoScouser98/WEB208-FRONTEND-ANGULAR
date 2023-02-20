@@ -1,66 +1,100 @@
-<div class="grid grid-cols-3 gap-2">
-	<div class="drop-drag-container">
+<div class="drop-drag-container">
+	<ng-container [ngSwitch]="status">
 		<div
-			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-info"
+			*ngSwitchCase="'TODO'"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-info"
 		>
-			<i class="bi bi-list"></i> To do
+			<i class="bi bi-list"></i> {{ listTitle }}
 		</div>
-
 		<div
-			cdkDropList
-			data-status="TODO"
-			#todoList="cdkDropList"
-			[cdkDropListData]="todos"
-			[cdkDropListConnectedTo]="[inProgressList, doneList]"
-			class="drop-drag-list"
-			(cdkDropListDropped)="drop($event)"
+			*ngSwitchCase="'IN_PROGRESS'"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-warning"
 		>
-			<div class="drop-drag-box" *ngFor="let item of todos" cdkDrag>
-				{{ item.title }}
+			<i class="bi bi-lightning-fill"></i> {{ listTitle }}
+		</div>
+		<div
+			*ngSwitchCase="'COMPLETED'"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-success"
+		>
+			<i class="bi bi-check-circle"></i> {{ listTitle }}
+		</div>
+	</ng-container>
+
+	<div
+		cdkDropList
+		[attr.data-status]="status"
+		[cdkDropListData]="listData"
+		(cdkDropListDropped)="drop($event)"
+		class="drop-drag-list"
+	>
+		<div
+			tabindex="0"
+			class="drop-drag-box collapse-arrow collapse border-b"
+			*ngFor="let task of listData"
+			cdkDrag
+		>
+			<input type="checkbox" />
+			<div class="collapse-title">
+				{{ task?.title }}
 			</div>
-		</div>
-	</div>
-
-	<div class="drop-drag-container">
-		<div
-			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-warning"
-		>
-			<i class="bi bi-lightning-fill"></i> In progress
-		</div>
-
-		<div
-			cdkDropList
-			data-status="IN_PROGRESS"
-			#inProgressList="cdkDropList"
-			[cdkDropListData]="inProgress"
-			[cdkDropListConnectedTo]="[doneList, todoList]"
-			class="drop-drag-list"
-			(cdkDropListDropped)="drop($event)"
-		>
-			<div class="drop-drag-box" *ngFor="let item of inProgress" cdkDrag>
-				{{ item.title }}
-			</div>
-		</div>
-	</div>
-
-	<div class="drop-drag-container">
-		<div
-			class="inline-flex w-full items-center justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-success"
-		>
-			<i class="bi bi-check-circle"></i> Done
-		</div>
-
-		<div
-			cdkDropList
-			data-status="COMPLETED"
-			#doneList="cdkDropList"
-			[cdkDropListData]="done"
-			[cdkDropListConnectedTo]="[inProgressList, todoList]"
-			class="drop-drag-list"
-			(cdkDropListDropped)="drop($event)"
-		>
-			<div class="drop-drag-box" *ngFor="let item of done" cdkDrag>
-				{{ item.title }}
+			<div class="collapse-content">
+				<div class="scroll overflow-x-scroll py-2">
+					<table
+						class="table [&>tr>>td:first-child]:capitalize [&>tr>td:first-child]:font-medium [&>tr>td]:first-letter:uppercase"
+					>
+						<tr>
+							<td>description</td>
+							<td>{{ task?.description }}</td>
+						</tr>
+						<tr>
+							<td>started at</td>
+							<td>{{ task?.startedAt | date }}</td>
+						</tr>
+						<tr>
+							<td>deadline</td>
+							<td>
+								{{ task?.deadline | date }}
+							</td>
+						</tr>
+						<tr>
+							<td>assign to</td>
+							<td>
+								<div class="flex items-center gap-2">
+									<div class="avatar">
+										<div class="w-8 rounded-full">
+											<img
+												[src]="task?.assignee?.photoUrl"
+											/>
+										</div>
+									</div>
+									<span>{{ task?.assignee?.username }}</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="flex justify-end py-2">
+					<div
+						class="tooltip tooltip-left"
+						data-tip="Delete this task"
+					>
+						<button
+							type="button"
+							class="btn-ghost btn btn-sm btn-square text-lg text-error"
+							(click)="deleteTask(task)"
+						>
+							<i class="bi bi-trash"></i>
+						</button>
+					</div>
+					<div class="tooltip tooltip-left" data-tip="Edit this task">
+						<label
+							for="edit-task-form-modal"
+							class="btn-ghost btn btn-sm btn-square text-lg"
+							(click)="setTaskToEdit(task)"
+							><i class="bi bi-pencil"></i
+						></label>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
