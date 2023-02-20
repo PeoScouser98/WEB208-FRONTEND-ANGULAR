@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import env from '../environment/environment.dev';
+import env from '../environment/environment.production';
 import { LoginData, User } from '../interfaces/user.interface';
 import { AuthGuardService } from './authGuard.service';
 
