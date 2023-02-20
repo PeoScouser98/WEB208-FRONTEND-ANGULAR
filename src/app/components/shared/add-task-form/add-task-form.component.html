@@ -84,6 +84,13 @@
 	</div>
 
 	<div class="form-control">
-		<button type="submit" class="btn font-medium">Save</button>
+		<button
+			type="submit"
+			[ngClass]="
+				isLoading ? 'loading btn font-medium' : 'btn font-medium'
+			"
+		>
+			Save
+		</button>
 	</div>
 </form>

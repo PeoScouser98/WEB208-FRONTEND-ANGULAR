@@ -20,7 +20,7 @@ import { ProjectService } from 'src/app/services/project.service';
 export class AddTaskForm implements OnInit, OnChanges {
 	@Output() addNewTask = new EventEmitter<Task>();
 	@Input() currentProject: any;
-
+	isLoading: boolean = false;
 	todos: Array<Task> = [];
 
 	constructor(
@@ -44,7 +44,6 @@ export class AddTaskForm implements OnInit, OnChanges {
 	ngOnInit() {}
 	ngOnChanges() {}
 	addTask() {
-		console.log(this.addTaskForm.value);
 		if (this.addTaskForm.invalid) {
 			Object.values(this.form).forEach((control) => {
 				if (control.invalid) {
@@ -54,6 +53,7 @@ export class AddTaskForm implements OnInit, OnChanges {
 			});
 			return;
 		}
+		this.isLoading = true;
 		this.taskService
 			.createTask(
 				{
@@ -65,6 +65,7 @@ export class AddTaskForm implements OnInit, OnChanges {
 			.subscribe((data) => {
 				this.addNewTask.emit(data as Task); // Emit new task data to project component
 				this.toastService.success('Added new task!');
+				this.isLoading = false;
 			});
 	}
 
