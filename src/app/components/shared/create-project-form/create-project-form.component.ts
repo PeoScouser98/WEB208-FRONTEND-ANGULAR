@@ -40,6 +40,7 @@ export class CreateProjectForm implements OnInit {
 				this.toastService.success('Created new project');
 				this.router.navigate(['/project/:id'], data._id as any);
 				this.createProjectEvent.emit(data);
+				this.createProjectForm.reset();
 			});
 	}
 

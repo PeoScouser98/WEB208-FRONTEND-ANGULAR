@@ -6,7 +6,7 @@
 	<div class="drawer-content flex flex-col items-stretch">
 		<label
 			for="drawer-toggle"
-			class="btn-ghost btn drawer-button invisible fixed top-1 right-1 text-xl sm:visible"
+			class="btn-ghost drawer-button btn invisible fixed top-1 right-1 text-xl sm:visible"
 		>
 			<i class="bi bi-list"></i>
 		</label>
@@ -22,7 +22,7 @@
 	<div class="drawer-side h-screen text-neutral-content">
 		<label for="drawer-toggle" class="drawer-overlay"></label>
 
-		<div class="flex w-fit flex-col justify-between gap-6 bg-neutral-focus">
+		<div class="justify-betweengap-6 flex w-fit flex-col bg-neutral-focus">
 			<!-- sidebar menu -->
 			<ul
 				class="menu h-full min-w-[320px] py-6 px-4 text-base [&>li]:rounded-lg"
@@ -101,39 +101,60 @@
 					</label>
 				</li>
 			</ul>
-
 			<!-- user info -->
-			<label
-				tabindex="0"
-				class="flex h-fit w-full items-center justify-between gap-2 bg-neutral p-4"
-			>
-				<div class="flex items-center gap-4">
-					<div class="avatar">
-						<div class="w-10 rounded-full">
-							<img
-								[src]="authGuardService.currentUser?.photoUrl"
-							/>
+			<div tabindex="0" class="collapse h-fit bg-neutral">
+				<input type="checkbox" />
+				<div
+					class="collapse-title mb-4 flex h-fit place-items-center items-center justify-between p-4"
+				>
+					<div class="flex items-center gap-2">
+						<div class="avatar">
+							<div class="w-10 rounded-full">
+								<img
+									[src]="
+										authGuardService.currentUser?.photoUrl
+									"
+									loading="lazy"
+								/>
+							</div>
 						</div>
-					</div>
-					<span>
-						{{ authGuardService.currentUser?.username }}
-					</span>
 
-					<a routerLink="/account">
-						<i class="bi bi-box-arrow-in-down-left"></i>
-					</a>
+						<a routerLink="/account" class="hover:link"
+							>{{ authGuardService.currentUser?.username }}
+						</a>
+					</div>
+
+					<div class="tooltip tooltip-left" data-tip="Logout">
+						<button
+							class="btn-ghost btn-xs btn w-fit text-xl font-medium hover:bg-transparent"
+							(click)="authService.logout()"
+						>
+							<i class="bi bi-door-open"></i>
+						</button>
+					</div>
 				</div>
-				<div class="tooltip tooltip-left" data-tip="Logout">
-					<button
-						class="btn-ghost btn btn-xs w-fit text-xl font-medium hover:bg-transparent"
-						(click)="authService.logout()"
-					>
-						<i class="bi bi-door-open"></i>
-					</button>
+				<div class="collapse-content h-full overflow-visible">
+					<ul class="menu py-4">
+						<li>
+							<label for="edit-profile-form">
+								<i class="bi bi-person"></i> Edit your profile
+							</label>
+						</li>
+						<li>
+							<label for="change-password-form"
+								><i class="bi bi-key"></i> Change
+								password</label
+							>
+						</li>
+					</ul>
 				</div>
-			</label>
+			</div>
 		</div>
 	</div>
+	<!-- Edit profile -->
+	<edit-profile-form></edit-profile-form>
 	<!-- Create project form -->
 	<create-project-form></create-project-form>
+	<!-- Change password form -->
+	<change-password-form></change-password-form>
 </div>

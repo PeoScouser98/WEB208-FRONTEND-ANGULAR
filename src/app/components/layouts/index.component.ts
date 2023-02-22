@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class Dashboard implements OnInit {
 	theme: string = localStorage.getItem('theme')!;
-
+	isFetching: boolean = false;
 	constructor(
 		public toast: ToastService,
 		public authGuardService: AuthGuardService,
@@ -27,15 +27,15 @@ export class Dashboard implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.isFetching = true;
 		this.authService.getUser().subscribe((data) => {
-			console.log(data);
 			this.authGuardService.currentUser = data;
 			this.authGuardService.isLoggedIn = true;
 		});
 		this.projectService.getAllJoinedProjects().subscribe((data) => {
-			console.log(data);
 			this.projectService.projects = data as Array<Project>;
 		});
+		this.isFetching = false;
 	}
 
 	onCreateNewProject(newProject: Project) {

@@ -2,19 +2,20 @@
 	<ng-container [ngSwitch]="status">
 		<div
 			*ngSwitchCase="'TODO'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-info"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-info"
 		>
-			<i class="bi bi-list"></i> {{ listTitle }}
+			<i class="bi bi-lightning-fill"></i>
+			{{ listTitle }}
 		</div>
 		<div
 			*ngSwitchCase="'IN_PROGRESS'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-warning"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-warning"
 		>
-			<i class="bi bi-lightning-fill"></i> {{ listTitle }}
+			<i class="bi bi-clock"></i> {{ listTitle }}
 		</div>
 		<div
 			*ngSwitchCase="'COMPLETED'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-success"
+			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-success"
 		>
 			<i class="bi bi-check-circle"></i> {{ listTitle }}
 		</div>
@@ -40,7 +41,7 @@
 			<div class="collapse-content">
 				<div class="scroll overflow-x-scroll py-2">
 					<table
-						class="table [&>tr>>td:first-child]:capitalize [&>tr>td:first-child]:font-medium [&>tr>td]:first-letter:uppercase"
+						class="table [&>tr>>td:first-child]:capitalize [&>tr>td:first-child]:font-medium [&>tr>td]:first-letter:capitalize"
 					>
 						<tr>
 							<td>description</td>
@@ -80,7 +81,7 @@
 					>
 						<button
 							type="button"
-							class="btn-ghost btn btn-sm btn-square text-lg text-error"
+							class="btn-ghost btn-square btn-sm btn text-lg text-error"
 							(click)="deleteTask(task)"
 						>
 							<i class="bi bi-trash"></i>
@@ -89,7 +90,7 @@
 					<div class="tooltip tooltip-left" data-tip="Edit this task">
 						<label
 							for="edit-task-form-modal"
-							class="btn-ghost btn btn-sm btn-square text-lg"
+							class="btn-ghost btn-square btn-sm btn text-lg"
 							(click)="setTaskToEdit(task)"
 							><i class="bi bi-pencil"></i
 						></label>

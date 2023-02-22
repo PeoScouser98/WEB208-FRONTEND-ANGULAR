@@ -66,6 +66,7 @@ export class AddTaskForm implements OnInit, OnChanges {
 				this.addNewTask.emit(data as Task); // Emit new task data to project component
 				this.toastService.success('Added new task!');
 				this.isLoading = false;
+				this.addTaskForm.reset();
 			});
 	}
 

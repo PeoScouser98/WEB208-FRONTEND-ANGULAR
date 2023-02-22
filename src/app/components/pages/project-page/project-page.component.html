@@ -24,13 +24,14 @@
 					<!-- project name -->
 					<div class="flex flex-col gap-2">
 						<div class="text-2xl font-medium">
+							<i class="bi bi-folder"></i>
 							{{ currentProject?.projectName! }}
 						</div>
 						<!-- project options -->
 						<div class="dropdown-right dropdown">
 							<label
 								tabindex="0"
-								class="btn-ghost btn-sm btn-square btn"
+								class="btn-ghost btn-square btn-sm btn"
 							>
 								<i class="bi bi-three-dots"></i>
 							</label>
@@ -135,7 +136,7 @@
 											{{ user.username }}
 										</div>
 										<button
-											class="btn-ghost btn-sm btn-square btn text-lg hover:bg-transparent hover:text-info"
+											class="btn-ghost btn-square btn-sm btn text-lg hover:bg-transparent hover:text-info"
 											(click)="addMemberToProject(user)"
 										>
 											<i class="bi bi-person-plus"></i>
@@ -149,7 +150,8 @@
 					<!-- members list -->
 					<div class="flex items-center gap-3">
 						<span
-							>{{ currentProject?.members?.length }} members</span
+							><i class="bi bi-people"></i>
+							{{ currentProject?.members?.length }} members</span
 						>
 						<div class="avatar-group -space-x-4">
 							<div

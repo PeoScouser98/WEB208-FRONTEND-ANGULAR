@@ -30,6 +30,18 @@ export class AuthService {
 			data
 		) as Observable<User>;
 	}
+	changePassword({
+		currentPassword,
+		newPassword,
+	}: {
+		currentPassword: string;
+		newPassword: string;
+	}) {
+		return this.httpClient.patch(env.baseUrl + '/change-password', {
+			currentPassword,
+			newPassword,
+		});
+	}
 	refreshToken(credential: string) {
 		return this.httpClient.get(
 			env.baseUrl + '/refresh-token/' + credential
@@ -41,6 +53,12 @@ export class AuthService {
 				searchTerm: searchTermValue,
 			},
 		});
+	}
+	editProfile(updatedData: Partial<User>) {
+		return this.httpClient.patch(
+			env.baseUrl + '/edit-profile',
+			updatedData
+		);
 	}
 	logout() {
 		localStorage.removeItem('auth');

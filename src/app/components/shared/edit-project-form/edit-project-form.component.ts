@@ -15,7 +15,7 @@ import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
 	selector: 'edit-project-form',
-	templateUrl: 'edit-project-form.component.html',
+	templateUrl: './edit-project-form.component.html',
 })
 export class EditProjectForm implements OnInit, OnChanges {
 	@Input() currentProject: Project | any;
@@ -60,6 +60,7 @@ export class EditProjectForm implements OnInit, OnChanges {
 			.subscribe((data) => {
 				this.toastService.success('Updated project');
 				this.editProjectEvent.emit(data as Project);
+				this.editProjectForm.reset();
 			});
 	}
 

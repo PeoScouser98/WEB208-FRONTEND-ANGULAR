@@ -1,0 +1,54 @@
+<div class="flex h-full w-full items-center justify-center">
+	<div
+		class="rounded-box flex min-w-[384px] flex-col items-center gap-6 bg-base-100 p-4 shadow-2xl"
+	>
+		<!-- top -->
+		<div class="flex flex-col items-center gap-4">
+			<div class="avatar">
+				<div class="w-40 rounded-full">
+					<img
+						[src]="authService.currentUser.photoUrl"
+						loading="lazy"
+					/>
+				</div>
+			</div>
+			<h4 class="inline-flex items-center gap-2 text-2xl font-medium">
+				<span>
+					{{ authService.currentUser.username }}
+				</span>
+				<!-- The button to open modal -->
+				<label
+					for="update-username"
+					class="btn-ghost btn-sm btn-circle btn"
+				>
+					<i class="bi bi-pencil"></i>
+				</label>
+			</h4>
+		</div>
+		<!-- User form disable -->
+		<div class="form-control flex-row gap-2">
+			<label for="">Password</label>
+			<input
+				type="password"
+				class="input-disabled input-bordered input input-sm"
+				placeholder="********"
+			/>
+		</div>
+	</div>
+</div>
+<!-- Put this part before </body> tag -->
+<input type="checkbox" id="my-modal-3" class="modal-toggle" />
+<div class="modal">
+	<div class="modal-box relative">
+		<label
+			for="my-modal-3"
+			class="btn-sm btn-circle btn absolute right-2 top-2"
+			>✕</label
+		>
+		<h3 class="text-lg font-bold">Congratulations random Internet user!</h3>
+		<p class="py-4">
+			You've been selected for a chance to get one year of subscription to
+			use Wikipedia for free!
+		</p>
+	</div>
+</div>

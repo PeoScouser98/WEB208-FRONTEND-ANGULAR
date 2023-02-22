@@ -72,6 +72,7 @@ export class EditTaskForm implements OnInit, OnChanges {
 				console.log(data);
 				this.toastService.success('Task has been updated!');
 				this.editTaskEvent.emit(data as Task);
+				this.editTaskForm.reset();
 			});
 	}
 
