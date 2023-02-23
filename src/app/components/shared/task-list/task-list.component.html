@@ -2,22 +2,22 @@
 	<ng-container [ngSwitch]="status">
 		<div
 			*ngSwitchCase="'TODO'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-info"
+			class="tasks-center inline-flex w-full select-none justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-neutral-content"
 		>
-			<i class="bi bi-lightning-fill"></i>
+			<i class="bi bi-list-task"></i>
 			{{ listTitle }}
 		</div>
 		<div
 			*ngSwitchCase="'IN_PROGRESS'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-warning"
+			class="tasks-center inline-flex w-full select-none justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-warning"
 		>
-			<i class="bi bi-clock"></i> {{ listTitle }}
+			<i class="bi bi-clock-fill"></i> {{ listTitle }}
 		</div>
 		<div
 			*ngSwitchCase="'COMPLETED'"
-			class="tasks-center inline-flex w-full justify-center gap-2 bg-neutral p-2 text-lg font-medium capitalize text-success"
+			class="tasks-center inline-flex w-full select-none justify-center gap-2 bg-neutral p-2 text-lg font-medium uppercase text-success"
 		>
-			<i class="bi bi-check-circle"></i> {{ listTitle }}
+			<i class="bi bi-check-circle-fill"></i> {{ listTitle }}
 		</div>
 	</ng-container>
 
@@ -28,12 +28,7 @@
 		(cdkDropListDropped)="drop($event)"
 		class="drop-drag-list"
 	>
-		<div
-			tabindex="0"
-			class="drop-drag-box collapse-arrow collapse border-b"
-			*ngFor="let task of listData"
-			cdkDrag
-		>
+		<div tabindex="0" class="drop-drag-box collapse-arrow collapse border-b" *ngFor="let task of listData" cdkDrag>
 			<input type="checkbox" />
 			<div class="collapse-title">
 				{{ task?.title }}
@@ -43,6 +38,10 @@
 					<table
 						class="table [&>tr>>td:first-child]:capitalize [&>tr>td:first-child]:font-medium [&>tr>td]:first-letter:capitalize"
 					>
+						<tr>
+							<td>creator</td>
+							<td>{{ task?.creator?.username }}</td>
+						</tr>
 						<tr>
 							<td>description</td>
 							<td>{{ task?.description }}</td>
@@ -63,9 +62,7 @@
 								<div class="flex items-center gap-2">
 									<div class="avatar">
 										<div class="w-8 rounded-full">
-											<img
-												[src]="task?.assignee?.photoUrl"
-											/>
+											<img [src]="task?.assignee?.photoUrl" />
 										</div>
 									</div>
 									<span>{{ task?.assignee?.username }}</span>
@@ -75,13 +72,10 @@
 					</table>
 				</div>
 				<div class="flex justify-end py-2">
-					<div
-						class="tooltip tooltip-left"
-						data-tip="Delete this task"
-					>
+					<div class="tooltip tooltip-left" data-tip="Delete this task">
 						<button
 							type="button"
-							class="btn-ghost btn-square btn-sm btn text-lg text-error"
+							class="btn-ghost btn-sm btn-square btn text-lg text-error"
 							(click)="deleteTask(task)"
 						>
 							<i class="bi bi-trash"></i>
@@ -90,7 +84,7 @@
 					<div class="tooltip tooltip-left" data-tip="Edit this task">
 						<label
 							for="edit-task-form-modal"
-							class="btn-ghost btn-square btn-sm btn text-lg"
+							class="btn-ghost btn-sm btn-square btn text-lg"
 							(click)="setTaskToEdit(task)"
 							><i class="bi bi-pencil"></i
 						></label>

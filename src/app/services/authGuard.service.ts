@@ -8,9 +8,8 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuardService implements CanActivate {
-	currentUser: any = null;
-	accessToken: string | null = null;
 	isLoggedIn: boolean = false;
+
 	constructor(private route: Router) {
 		this.isLoggedIn =
 			!!localStorage.getItem('accessToken') &&

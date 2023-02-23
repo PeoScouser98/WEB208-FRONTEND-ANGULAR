@@ -12,26 +12,22 @@ export class EditUserInfo implements OnInit {
 	currentUser: Partial<User> = {};
 
 	constructor(
-		public authGuardService: AuthGuardService,
-		private userService: AuthService,
+		public authService: AuthService,
 		private toastService: ToastService
 	) {}
 
 	editProfile() {
-		this.userService
-			.editProfile(this.authGuardService.currentUser)
-			.subscribe(
-				(data) => {
-					console.log(data);
-					this.toastService.success('Edited profile successfully!');
-				},
-				({ error }) => {
-					console.log(error);
-				}
-			);
+		this.authService.editProfile(this.authService.currentUser!).subscribe(
+			(data) => {
+				this.authService.currentUser = data;
+				this.toastService.success('Edited profile successfully!');
+			},
+			({ error }) => {
+				console.log(error);
+			}
+		);
 	}
 	ngOnInit() {
-		console.log(this.authGuardService.currentUser);
-		this.currentUser = this.authGuardService.currentUser;
+		console.log(this.authService.currentUser);
 	}
 }

@@ -1,20 +1,9 @@
-<form
-	[formGroup]="addTaskForm"
-	(ngSubmit)="addTask()"
-	class="mx-auto flex max-w-full flex-col gap-6"
->
+<input type="checkbox" class="invisible" id="add-task-form-toggle" />
+<form [formGroup]="addTaskForm" (ngSubmit)="addTask()" class="relative mx-auto flex h-full max-w-full flex-col gap-6">
 	<div class="form-control">
 		<label class="label">Title</label>
-		<input
-			type="text"
-			class="input-bordered input"
-			placeholder="Task name"
-			formControlName="title"
-		/>
-		<small
-			class="font-medium text-error"
-			*ngIf="form.title.errors?.['required'] && form.title.dirty"
-		>
+		<input type="text" class="input-bordered input" placeholder="Task name" formControlName="title" />
+		<small class="font-medium text-error" *ngIf="form.title.errors?.['required'] && form.title.dirty">
 			Provide a task name!
 		</small>
 	</div>
@@ -28,69 +17,39 @@
 			placeholder="Describe about this task"
 			formControlName="description"
 		></textarea>
-		<small
-			class="font-medium text-error"
-			*ngIf="form.description.errors?.['required'] && form.description.dirty "
-		>
+		<small class="font-medium text-error" *ngIf="form.description.errors?.['required'] && form.description.dirty ">
 			Provide a description!
 		</small>
 	</div>
 
 	<div class="form-control">
 		<label class="label">Assignee</label>
-		<select
-			formControlName="assignee"
-			class="select-bordered select font-normal"
-		>
+		<select formControlName="assignee" class="select-bordered select font-normal">
 			<option value="">--- Assign to ---</option>
-			<option
-				[value]="member.info._id"
-				*ngFor="let member of currentProject.members"
-			>
+			<option [value]="member.info._id" *ngFor="let member of currentProject.members">
 				{{ member.info.username }}
 			</option>
 		</select>
-		<small
-			class="font-medium text-error"
-			*ngIf="form.assignee.errors?.['required'] && form.assignee.dirty "
+		<small class="font-medium text-error" *ngIf="form.assignee.errors?.['required'] && form.assignee.dirty "
 			>Choose an assignee</small
 		>
 	</div>
 	<div class="form-control">
 		<label class="label">Started At</label>
-		<input
-			type="date"
-			class="input-bordered input"
-			formControlName="startedAt"
-		/>
-		<small
-			class="font-medium text-error"
-			*ngIf="form.startedAt.errors?.['required'] && form.startedAt.dirty"
+		<input type="date" class="input-bordered input" formControlName="startedAt" [min]="getCurrentDate()" />
+		<small class="font-medium text-error" *ngIf="form.startedAt.errors?.['required'] && form.startedAt.dirty"
 			>Provide day to start</small
 		>
 	</div>
 	<div class="form-control">
 		<label class="label">Deadline</label>
-		<input
-			type="date"
-			class="input-bordered input"
-			formControlName="deadline"
-		/>
-		<small
-			class="font-medium text-error"
-			*ngIf="form.deadline.errors?.['required'] && form.deadline.dirty"
+		<input type="date" class="input-bordered input" formControlName="deadline" [min]="getCurrentDate()" />
+		<small class="font-medium text-error" *ngIf="form.deadline.errors?.['required'] && form.deadline.dirty"
 			>Provide day to finish</small
 		>
 	</div>
 
 	<div class="form-control">
-		<button
-			type="submit"
-			[ngClass]="
-				isLoading ? 'loading btn font-medium' : 'btn font-medium'
-			"
-		>
-			Save
-		</button>
+		<button type="submit" [ngClass]="isLoading ? 'loading btn font-medium' : 'btn font-medium'">Save</button>
 	</div>
 </form>

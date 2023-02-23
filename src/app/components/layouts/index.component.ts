@@ -10,7 +10,7 @@ import { ToastService } from 'src/app/services/toast.service';
 	selector: 'selector-name',
 	templateUrl: 'index.component.html',
 })
-export class Dashboard implements OnInit {
+export class Layout implements OnInit {
 	theme: string = localStorage.getItem('theme')!;
 	isFetching: boolean = false;
 	constructor(
@@ -29,7 +29,7 @@ export class Dashboard implements OnInit {
 	ngOnInit(): void {
 		this.isFetching = true;
 		this.authService.getUser().subscribe((data) => {
-			this.authGuardService.currentUser = data;
+			this.authService.currentUser = data;
 			this.authGuardService.isLoggedIn = true;
 		});
 		this.projectService.getAllJoinedProjects().subscribe((data) => {

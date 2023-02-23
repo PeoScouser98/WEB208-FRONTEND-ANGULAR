@@ -36,12 +36,11 @@ export class LoginPage {
 			(data) => {
 				localStorage.setItem('auth', data.auth);
 				localStorage.setItem('accessToken', data.accessToken);
-				this.toastService.success('Loggedin successfully!');
+				this.toastService.success('Logged in successfully!');
 				this.router.navigate(['']);
 			},
 			({ error }) => {
-				this.toastService.success(error);
-				console.log(error);
+				this.toastService.error(error.message);
 			}
 		);
 	}

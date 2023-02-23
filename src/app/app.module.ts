@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterLink } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { Dashboard } from './components/layouts/index.component';
+import { Layout } from './components/layouts/index.component';
 import { DashboardModule } from './components/layouts/index.module';
 import { LoginPage } from './components/pages/login/login.component';
 import { NotFoundPage } from './components/pages/not-found/not-found.component';
@@ -18,7 +18,7 @@ import { ToastComponent } from './components/shared/toast/toast.component';
 @NgModule({
 	declarations: [
 		AppComponent,
-		Dashboard,
+		Layout,
 		LoginPage,
 		RegisterPage,
 		ToastComponent,

@@ -1,20 +1,16 @@
-import { AuthGuardService } from './../../../services/authGuard.service';
-import { ToastService } from './../../../services/toast.service';
-import { AuthService } from 'src/app/services/auth.service';
-import {
-	CdkDragDrop,
-	moveItemInArray,
-	transferArrayItem,
-} from '@angular/cdk/drag-drop';
-import { Component, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { Project } from 'src/app/interfaces/project.interface';
-import { Task } from 'src/app/interfaces/task.interface';
-import { ProjectService } from 'src/app/services/project.service';
-import { TaskService } from 'src/app/services/task.service';
-import { User } from 'src/app/interfaces/user.interface';
+import { AuthGuardService } from "./../../../services/authGuard.service";
+import { ToastService } from "./../../../services/toast.service";
+import { AuthService } from "src/app/services/auth.service";
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from "@angular/cdk/drag-drop";
+import { Component, Output, EventEmitter } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { Project } from "src/app/interfaces/project.interface";
+import { Task } from "src/app/interfaces/task.interface";
+import { ProjectService } from "src/app/services/project.service";
+import { TaskService } from "src/app/services/task.service";
+import { User } from "src/app/interfaces/user.interface";
 
 interface TaskList {
 	listTitle: string;
@@ -26,8 +22,8 @@ interface TaskList {
 }
 
 @Component({
-	selector: 'app-project-page',
-	templateUrl: './project-page.component.html',
+	selector: "app-project-page",
+	templateUrl: "./project-page.component.html",
 })
 export class ProjectPage {
 	currentProject: Project | any = null;
@@ -37,8 +33,8 @@ export class ProjectPage {
 	isProjectCreator: boolean = false;
 	taskList: Array<TaskList> = [];
 	tasks: Array<Task> = [];
-	searchTerm: string = '';
-	searchResult: Array<Omit<User, 'password'>> = [];
+	searchTerm: string = "";
+	searchResult: Array<Omit<User, "password">> = [];
 	searchSubject = new Subject<string>();
 
 	constructor(
@@ -52,20 +48,15 @@ export class ProjectPage {
 	) {
 		this.searchSubject
 			.pipe(
-				debounceTime(1000),
+				debounceTime(500),
 				switchMap((term) => {
 					return this.authService.findUser(term);
 				})
 			)
 			.subscribe((data) => {
 				this.isSearching = false;
-				this.searchResult = (
-					data as Array<Omit<User, 'password'>>
-				).filter((user) =>
-					this.currentProject.members.every(
-						({ info }: { info: Partial<User> }) =>
-							info._id != user._id
-					)
+				this.searchResult = (data as Array<Omit<User, "password">>).filter((user) =>
+					this.currentProject.members.every(({ info }: { info: Partial<User> }) => info._id != user._id)
 				);
 			});
 	}
@@ -82,8 +73,7 @@ export class ProjectPage {
 		this.projectService
 			.addMember(this.currentProject._id, userData._id as string)
 			.subscribe(
-				(data: Partial<Project> | Pick<Project, 'members'>) =>
-					(this.currentProject.members = data.members)
+				(data: Partial<Project> | Pick<Project, "members">) => (this.currentProject.members = data.members)
 			);
 		this.toastService.info(`You have add ${userData.username} to project!`);
 	}
@@ -95,13 +85,11 @@ export class ProjectPage {
 			(data) => {
 				console.log(data);
 				this.currentProject = data as Project;
-				this.isProjectCreator =
-					data?.creator?._id ===
-					this.authGuardService?.currentUser?._id;
+				this.isProjectCreator = data?.creator?._id === this.authService?.currentUser?._id;
 				this.isFetching = false;
 			},
 			(error) => {
-				console.log('[ERROR]:>>', error.error);
+				console.log("[ERROR]:>>", error.error);
 				this.isFetching = false;
 				this.isError = true;
 			}
@@ -111,25 +99,20 @@ export class ProjectPage {
 	// Update project
 	onUpdateProject(updatedProject: Project) {
 		this.currentProject = updatedProject;
-		this.projectService.projects = this.projectService.projects.map(
-			(project) => {
-				return project._id === updatedProject._id
-					? updatedProject
-					: project;
-			}
-		);
+		this.projectService.projects = this.projectService.projects.map((project) => {
+			return project._id === updatedProject._id ? updatedProject : project;
+		});
 	}
 
 	// Delete project
 	deleteProject() {
 		this.projectService.deleteProject(this.currentProject._id).subscribe(
 			(data) => {
-				this.toastService.info('Deleted project!');
-				this.router.navigate(['/']);
-				this.projectService.projects =
-					this.projectService.projects.filter(
-						(project) => project._id !== this.currentProject._id
-					);
+				this.toastService.info("Deleted project!");
+				this.router.navigate(["/"]);
+				this.projectService.projects = this.projectService.projects.filter(
+					(project) => project._id !== this.currentProject._id
+				);
 			},
 			({ error }) => {
 				this.toastService.error(error.message);
@@ -147,22 +130,22 @@ export class ProjectPage {
 	categorizeTaskByStatus(tasks: Array<Task>) {
 		return [
 			{
-				data: tasks.filter((task) => task.status === 'TODO'),
+				data: tasks.filter((task) => task.status === "TODO"),
 				currentProject: this.currentProject,
-				listTitle: 'todo',
-				status: 'TODO',
+				listTitle: "todo",
+				status: "TODO",
 			},
 			{
-				data: tasks.filter((task) => task.status === 'IN_PROGRESS'),
+				data: tasks.filter((task) => task.status === "IN_PROGRESS"),
 				currentProject: this.currentProject,
-				listTitle: 'in progress',
-				status: 'IN_PROGRESS',
+				listTitle: "in progress",
+				status: "IN_PROGRESS",
 			},
 			{
-				data: tasks.filter((task) => task.status === 'COMPLETED'),
+				data: tasks.filter((task) => task.status === "COMPLETED"),
 				currentProject: this.currentProject,
-				listTitle: 'completed',
-				status: 'COMPLETED',
+				listTitle: "completed",
+				status: "COMPLETED",
 			},
 		] as Array<TaskList>;
 	}
@@ -194,21 +177,11 @@ export class ProjectPage {
 	drop(event: CdkDragDrop<Task[]>) {
 		if (event.previousContainer === event.container) {
 			console.log(event);
-			moveItemInArray(
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex
-			);
+			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
-			transferArrayItem(
-				event.previousContainer.data,
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex
-			);
+			transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
 			const task = event.container.data[event.currentIndex] as Task;
-			const newStatus =
-				event.container.element.nativeElement.dataset['status'];
+			const newStatus = event.container.element.nativeElement.dataset["status"];
 			// update task data
 			this.taskService
 				.updateTask(this.currentProject._id, task._id, {

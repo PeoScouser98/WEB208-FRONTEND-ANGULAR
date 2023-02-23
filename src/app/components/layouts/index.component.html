@@ -1,68 +1,78 @@
 <app-toast></app-toast>
-<div class="drawer-mobile drawer h-screen" [attr.data-theme]="theme">
+<div class="drawer-mobile drawer h-screen w-screen" [attr.data-theme]="theme">
 	<!-- Drawer toggler -->
 	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
 	<!-- Page content -->
-	<div class="drawer-content flex flex-col items-stretch">
-		<label
-			for="drawer-toggle"
-			class="btn-ghost drawer-button btn invisible fixed top-1 right-1 text-xl sm:visible"
-		>
-			<i class="bi bi-list"></i>
-		</label>
-
+	<div class="drawer-content flex h-full flex-col items-stretch">
 		<!-- Page content here -->
-		<div
-			class="scroll mx-auto h-full w-full max-w-full overflow-y-auto overflow-x-hidden"
-		>
+
+		<div class="scroll mx-auto h-full w-full max-w-full overflow-y-auto overflow-x-hidden bg-base-100">
 			<router-outlet></router-outlet>
 		</div>
+		<!-- Edit profile -->
+		<edit-profile-form></edit-profile-form>
+		<!-- Create project form -->
+		<create-project-form></create-project-form>
+		<!-- Change password form -->
+		<change-password-form></change-password-form>
 	</div>
 	<!-- Sidebar -->
-	<div class="drawer-side h-screen text-neutral-content">
+	<div class="drawer-side overflow-x-auto">
 		<label for="drawer-toggle" class="drawer-overlay"></label>
 
-		<div class="justify-betweengap-6 flex w-fit flex-col bg-neutral-focus">
+		<div class="bg-neutral-focus text-neutral-content">
+			<!-- user info -->
+			<div tabindex="0" class="collapse-plus collapse bg-neutral p-3">
+				<input type="checkbox" />
+				<div class="collapse-title">
+					<div class="flex items-center gap-2">
+						<div class="avatar">
+							<div class="w-10 rounded-full">
+								<img [src]="authService.currentUser?.photoUrl" loading="lazy" />
+							</div>
+						</div>
+
+						<a routerLink="/account" class="hover:link">{{ authService.currentUser?.username }} </a>
+					</div>
+				</div>
+
+				<div class="collapse-content">
+					<ul class="menu py-4 [&>li:hover]:bg-neutral-content/20 [&>li:hover]:duration-300 [&>li]:rounded-lg">
+						<li>
+							<label for="edit-profile-form"> <i class="bi bi-person"></i> Edit your profile </label>
+						</li>
+						<li>
+							<label for="change-password-form"><i class="bi bi-key"></i> Change password</label>
+						</li>
+						<li (click)="authService.logout()">
+							<label for="change-password-form"><i class="bi bi-box-arrow-right"></i> Logout</label>
+						</li>
+					</ul>
+				</div>
+			</div>
+
 			<!-- sidebar menu -->
-			<ul
-				class="menu h-full min-w-[320px] py-6 px-4 text-base [&>li]:rounded-lg"
-			>
-				<li class="hover:bg-neutral-content/20">
+			<ul class="menu min-w-[320px] p-4 text-base [&>li]:rounded-lg">
+				<li>
 					<a routerLink="/"><i class="bi bi-grid"></i> Dashboard</a>
 				</li>
-				<li class="hover:bg-neutral-content/20">
+				<li>
 					<label class="p-0">
 						<div class="collapse-arrow collapse w-full">
 							<input type="checkbox" />
-							<div
-								class="collapse-title flex items-center gap-3 px-4 py-3"
-							>
+							<div class="collapse-title flex items-center gap-3 px-4 py-3">
 								<i class="bi bi-folder"></i> Projects
 							</div>
 							<div class="collapse-content h-fit min-w-full">
 								<ul class="menu">
 									<li>
-										<label
-											for="create-project-form"
-											class="text-info"
-										>
-											<i
-												class="bi bi-plus-square-dotted"
-											></i>
+										<label for="create-project-form" class="font-medium text-success">
+											<i class="bi bi-plus-square-dotted"></i>
 											Create New Project
 										</label>
 									</li>
-									<li
-										*ngFor="
-											let project of projectService.projects
-										"
-									>
-										<a
-											[routerLink]="[
-												'projects',
-												project._id
-											]"
-										>
+									<li *ngFor="let project of projectService.projects">
+										<a [routerLink]="['projects', project._id]">
 											<i class="bi bi-folder2-open"></i>
 											{{ project.projectName }}</a
 										>
@@ -73,27 +83,20 @@
 					</label>
 				</li>
 
-				<li class="hover:bg-neutral-content/20">
+				<li class="">
 					<label class="p-0">
 						<div class="collapse-arrow collapse w-full">
 							<input type="checkbox" />
-							<div
-								class="collapse-title flex items-center gap-3 px-4 py-3"
-							>
+							<div class="collapse-title flex items-center gap-3 px-4 py-3">
 								<i class="bi bi-gear"></i> Themes
 							</div>
 							<div class="collapse-content h-fit min-w-full">
 								<ul class="menu">
 									<li (click)="setTheme('light')">
-										<label>
-											<i class="bi bi-sun"></i>Light Theme
-										</label>
+										<label> <i class="bi bi-sun"></i>Light Theme </label>
 									</li>
 									<li (click)="setTheme('dark')">
-										<label
-											><i class="bi bi-moon"></i>Dark
-											Theme</label
-										>
+										<label><i class="bi bi-moon"></i>Dark Theme</label>
 									</li>
 								</ul>
 							</div>
@@ -101,60 +104,6 @@
 					</label>
 				</li>
 			</ul>
-			<!-- user info -->
-			<div tabindex="0" class="collapse h-fit bg-neutral">
-				<input type="checkbox" />
-				<div
-					class="collapse-title mb-4 flex h-fit place-items-center items-center justify-between p-4"
-				>
-					<div class="flex items-center gap-2">
-						<div class="avatar">
-							<div class="w-10 rounded-full">
-								<img
-									[src]="
-										authGuardService.currentUser?.photoUrl
-									"
-									loading="lazy"
-								/>
-							</div>
-						</div>
-
-						<a routerLink="/account" class="hover:link"
-							>{{ authGuardService.currentUser?.username }}
-						</a>
-					</div>
-
-					<div class="tooltip tooltip-left" data-tip="Logout">
-						<button
-							class="btn-ghost btn-xs btn w-fit text-xl font-medium hover:bg-transparent"
-							(click)="authService.logout()"
-						>
-							<i class="bi bi-door-open"></i>
-						</button>
-					</div>
-				</div>
-				<div class="collapse-content h-full overflow-visible">
-					<ul class="menu py-4">
-						<li>
-							<label for="edit-profile-form">
-								<i class="bi bi-person"></i> Edit your profile
-							</label>
-						</li>
-						<li>
-							<label for="change-password-form"
-								><i class="bi bi-key"></i> Change
-								password</label
-							>
-						</li>
-					</ul>
-				</div>
-			</div>
 		</div>
 	</div>
-	<!-- Edit profile -->
-	<edit-profile-form></edit-profile-form>
-	<!-- Create project form -->
-	<create-project-form></create-project-form>
-	<!-- Change password form -->
-	<change-password-form></change-password-form>
 </div>

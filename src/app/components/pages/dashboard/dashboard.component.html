@@ -1,0 +1,76 @@
+<div class="container mx-auto p-6">
+	<div class="w-full overflow-x-auto">
+		<section>
+			<h1 class="mb-4 text-2xl font-medium">Projects</h1>
+			<table class="table w-full [&:where(thead):where(th,td)]:bg-neutral">
+				<!-- head -->
+				<thead>
+					<tr>
+						<th>
+							<span class="inline-flex items-center gap-2"><i class="bi bi-folder text-lg"></i> project </span>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2"> <i class="bi bi-people text-lg"></i> members</span>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2"
+								><i class="bi bi-currency-exchange text-lg"></i> budget
+							</span>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2"> </span><i class="bi bi-person text-lg"></i> customer
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2">
+								<i class="bi bi-calendar text-lg"></i> started at</span
+							>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2"
+								><i class="bi bi-calendar-check text-lg"></i> estimate complete
+							</span>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2">
+								<i class="bi bi-list-task text-lg"></i> tasks remain
+							</span>
+						</th>
+						<th>
+							<span class="inline-flex items-center gap-2">
+								<i class="bi bi-list-check text-lg"></i> completed tasks
+							</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody *ngFor="let project of allJoinedProjects">
+					<!-- row 1 -->
+					<tr class="hover border-b border-base-content/10">
+						<td class="font-medium">
+							{{ project.projectName }}
+						</td>
+						<td>
+							<div class="avatar-group -space-x-4">
+								<div class="avatar" *ngFor="let member of project.members">
+									<div class="w-8 rounded-full">
+										<img [src]="member?.info?.photoUrl" alt="" />
+									</div>
+								</div>
+							</div>
+							<span>{{ project.members.length }} member(s)</span>
+						</td>
+						<td>{{ project.budget | currency : "USD" }}</td>
+						<td>
+							{{ project.customer }}
+						</td>
+						<td>{{ project?.createdAt | date }}</td>
+						<td>
+							{{ project.estimatedCompleteDate | date }}
+						</td>
+						<td>{{ project?.inCompleted }} task(s)</td>
+						<td>{{ project?.completed }} task(s)</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+	</div>
+</div>

@@ -1,13 +1,14 @@
-import { Project } from './project.interface';
-import { User } from './user.interface';
+import { Project } from "./project.interface";
+import { User } from "./user.interface";
 
 export interface Task {
 	_id: string;
 	title: string;
+	creator: Omit<User, "password">;
 	description: string;
-	assignee: Partial<User>;
+	assignee: Omit<User, "password">;
 	status: string;
-	startedAt: Date;
-	deadline: Date;
+	startedAt: Date | string;
+	deadline: Date | string;
 	project: Partial<Project>;
 }

@@ -15,6 +15,7 @@ import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 @Component({
 	selector: 'tasks-list',
 	templateUrl: 'task-list.component.html',
+	styleUrls: ['./task-list.component.css'],
 })
 export class TasksList implements OnInit {
 	@Input() currentProject: Project | any;

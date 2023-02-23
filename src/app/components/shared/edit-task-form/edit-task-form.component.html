@@ -3,19 +3,11 @@
 <!-- Put this part before </body> tag -->
 <input type="checkbox" id="edit-task-form-modal" class="modal-toggle" />
 
-<div class="modal bg-transparent">
+<div class="min-w-screen modal">
 	<div class="modal-box relative bg-base-200">
-		<label
-			for="edit-task-form-modal"
-			class="btn-sm btn-circle btn absolute right-2 top-2"
-			>✕</label
-		>
+		<label for="edit-task-form-modal" class="btn-ghost btn-sm btn-circle btn absolute right-2 top-2">✕</label>
 		<div class="text-center text-lg font-medium">Edit Task</div>
-		<form
-			[formGroup]="editTaskForm"
-			(ngSubmit)="editTask()"
-			class="mx-auto flex max-w-full flex-col gap-6"
-		>
+		<form [formGroup]="editTaskForm" (ngSubmit)="editTask()" class="mx-auto flex max-w-full flex-col gap-6">
 			<div class="form-control">
 				<label class="label">Title</label>
 				<input
@@ -25,10 +17,7 @@
 					formControlName="title"
 					[value]="taskService.taskToEdit?.title"
 				/>
-				<small
-					class="font-medium text-error"
-					*ngIf="form['title'].errors?.['required'] && form['title'].dirty"
-				>
+				<small class="font-medium text-error" *ngIf="form['title'].errors?.['required'] && form['title'].dirty">
 					Provide a task name!
 				</small>
 			</div>
@@ -52,18 +41,12 @@
 
 			<div class="form-control">
 				<label class="label">Assignee</label>
-				<select
-					formControlName="assignee"
-					class="select-bordered select font-normal"
-				>
+				<select formControlName="assignee" class="select-bordered select font-normal">
 					<option value="">--- Assign to ---</option>
 					<option
 						[value]="member.info._id"
 						*ngFor="let member of currentProject.members"
-						[selected]="
-							member.info._id ===
-							taskService.taskToEdit?.assignee?._id
-						"
+						[selected]="member.info._id === taskService.taskToEdit?.assignee?._id"
 					>
 						{{ member.info.username }}
 					</option>
@@ -79,7 +62,9 @@
 				<input
 					type="date"
 					class="input-bordered input"
+					[valueAsDate]="taskService.taskToEdit?.deadline"
 					formControlName="startedAt"
+					[min]="getCurrentDate()"
 				/>
 				<small
 					class="font-medium text-error"
@@ -89,11 +74,7 @@
 			</div>
 			<div class="form-control">
 				<label class="label">Deadline</label>
-				<input
-					type="datetime-local"
-					class="input-bordered input"
-					formControlName="deadline"
-				/>
+				<input type="date" class="input-bordered input" formControlName="deadline" [min]="getCurrentDate()" />
 				<small
 					class="font-medium text-error"
 					*ngIf="form['deadline'].errors?.['required'] && form['deadline'].dirty"
